@@ -1,0 +1,96 @@
+{
+  "id": "org.hdrmerge.HDRmerge",
+  "branch": "master",
+  "runtime": "org.kde.Platform",
+  "runtime-version": "5.9",
+  "sdk": "org.kde.Sdk",
+  "command": "hdrmerge",
+  "tags": [
+    "nightly"
+  ],
+  "finish-args": [
+    "--share=ipc",
+    "--socket=x11",
+    "--socket=wayland",
+    "--filesystem=host"
+  ],
+  "modules": [
+    "boost.json",
+    {
+      "name": "alglib",
+      "cleanup": [
+        "/share/doc"
+      ],
+      "sources": [
+        {
+          "type": "archive",
+          "url": "http://www.alglib.net/translator/re/alglib-3.13.0.cpp.gpl.tgz",
+          "sha256": "e47b7def14fbfcedaff5236ecdaa30b6dd9fd854eaa0a30354c8bec454692ee1"
+        }
+      ]
+    },
+    {
+      "name": "libraw",
+      "config-opts": [
+        "--disable-examples",
+        "--disable-static"
+      ],
+      "cleanup": [
+        "/share/doc"
+      ],
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://www.libraw.org/data/LibRaw-0.18.8.tar.gz",
+          "sha256": "56aca4fd97038923d57d2d17d90aa11d827f1f3d3f1d97e9f5a0d52ff87420e2"
+        },
+        {
+          "type": "patch",
+          "path": "libraw-pkgconfig.patch"
+        }
+      ]
+    },
+    {
+      "name": "exiv2",
+      "buildsystem": "cmake-ninja",
+      "builddir": true,
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://github.com/Exiv2/exiv2.git",
+          "branch": "v0.26"
+        }
+      ]
+    },
+    {
+      "name": "zlib",
+      "buildsystem": "autotools",
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://github.com/madler/zlib/archive/v1.2.11.tar.gz",
+          "sha256": "629380c90a77b964d896ed37163f5c3a34f6e6d897311f1df2a7016355c45eff"
+        }
+      ]
+    },
+    {
+      "name": "hdrmerge",
+      "cmake": true,
+      "build-options": {
+        "cxxflags": "-O3 -std=c++11 -Wno-deprecated-declarations -Wno-unused-result"
+      },
+      "config-opts": [
+        "-DCMAKE_CXX_FLAGS='-std=c++11 -Wno-deprecated-declarations -Wno-unused-result'",
+        "-DCMAKE_BUILD_TYPE='release'",
+        "-DCMAKE_C_FLAGS='-O2 -pipe'"
+      ],
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://github.com/jcelaya/hdrmerge",
+          "branch": "qt5"
+        }
+      ]
+    }
+  ]
+}
